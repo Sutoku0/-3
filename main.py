@@ -1,8 +1,9 @@
-USD_TO_RUB = 95.50
+input_str = input("Введите ваш вес в кг и рост в метрах через пробел: ")
 
-def convert_usd_to_rub(amount_usd):
-    """Конвертация долларов в рубли."""
-    return amount_usd * USD_TO_RUB
+weight, height = map(float, input_str.split())
 
-amount = float(input("Введите сумму в долларах: "))
-print(f"{amount} USD = {convert_usd_to_rub(amount):.2f} RUB")
+bmi = weight/(height ** 2)
+
+formatred_bmi = f"{bmi:1f}"
+
+print(f"Ваш индекс массы тела (ИМТ): {formatred_bmi}")
