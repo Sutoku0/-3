@@ -8,6 +8,6 @@ if max(col1, row1, col2, row2) > 8:
 else:
 
     if (col1 == col2) or (row1 == row2) or ((col2 - col1) == (row2 - row1)) or ((col2 - col1) == (row1 - row2)):
-        print("YES")
+        print("Да")
     else:
-        print("NO")
+        print("Нет")
