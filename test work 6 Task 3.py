@@ -17,6 +17,6 @@ first_cell_color = (column_first + row_first) % 2
 second_cell_color = (column_second + row_second) % 2
 
 if first_cell_color == second_cell_color:
-    print("YES")
+    print("Да")
 else:
-    print("NO")
+    print("Нет")
