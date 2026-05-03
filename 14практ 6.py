@@ -1,0 +1,15 @@
+prices = list(map(int, input("Введите цены предметов через пробел: ").split()))
+# первоначальный порядок
+original_list = prices.copy()
+
+# сортировка по возрастанию
+ascending = sorted(prices)
+# Сортировка по убыванию
+descending = sorted(prices, reverse=True)
+# Обратный порядок (откуда взяли)
+reverse_order = list(reversed(prices))
+
+print(f"Сортировка по возрастанию: {ascending}")
+print(f"Сортировка по убыванию: {descending}")
+print(f"Оригинальный порядок (от старых к новым): {original_list}")
+print(f"Обратный порядок (от новых к старым): {reverse_order}")
