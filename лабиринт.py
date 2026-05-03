@@ -1,0 +1,77 @@
+import random
+
+# Определяем возможные символы лабиринта, кроме "н" — начальной точки:
+symbols = ['0', '1', 'л', 'м', 'ф', 'з']
+
+def generate_labyrinth():
+    labyrinth_list = []
+
+    # Расположим вход 'н' в случайной позиции
+    start_index = random.randint(0, 24)
+    for i in range(25):
+        if i == start_index:
+            labyrinth_list.append('н')  # вход
+        else:
+            labyrinth_list.append(random.choice(symbols))
+    return ''.join(labyrinth_list)
+
+# Генерируем лабиринт
+labyrinth_str = generate_labyrinth()
+print(f"Сгенерированный лабиринт: {labyrinth_str}")
+
+# Далее повторяем те же шаги, что и раньше
+# 1.1 Вывод лабиринта
+print("Лабиринт (сеткой 5x5):")
+for i in range(5):
+    row = labyrinth_str[i*5:(i+1)*5]
+    print(row)
+
+# 1.2 Находим вход
+start_index = labyrinth_str.find('н')
+start_row, start_col = divmod(start_index, 5)
+print(f"Вход 'н' в строке {start_row}, столбце {start_col}")
+
+# 1.3 Находим выход
+exit_index = labyrinth_str.find('ф')
+if exit_index == -1:
+    print("Выход 'ф' не найден в лабиринте.")
+else:
+    exit_row, exit_col = divmod(exit_index, 5)
+    print(f"Выход 'ф' в строке {exit_row}, столбце {exit_col}")
+
+    # 1.4 Манхэтенское расстояние
+    distance = abs(start_row - exit_row) + abs(start_col - exit_col)
+    print(f"Манхэттенское расстояние между входом и выходом: {distance}")
+
+# 1.5 Подсчет мониток
+coins_count = labyrinth_str.count('м')
+coins_display = '🟡' * coins_count
+print(f"Всего монет: {coins_count} ({coins_display})")
+
+# 1.6 Расчет здоровья, счастья, вайба, то сё
+health = 100
+trap_count = labyrinth_str.count('л')
+enemy_count = labyrinth_str.count('з')
+
+health -= trap_count * 10
+health -= enemy_count * 50
+
+hearts = health // 10
+hearts_display = '♥' * hearts + '♡' * (10 - hearts)
+print(f"Оставшееся здоровье: {hearts_display}")
+
+# 1.7 Замена символов на эмоуджиии
+replacements = {
+    '0': '⬜',
+    '1': '⬛',
+    'л': '🔷',
+    'м': '🟡',
+    'ф': '🟫',
+    'з': '🐷',
+    'н': '⭐'
+}
+print("Лабиринт в эмодзи:")
+for i in range(5):
+    row = labyrinth_str[i*5:(i+1)*5]
+    emoji_row = ''.join(replacements.get(ch, ch) for ch in row)
+    print(emoji_row)
