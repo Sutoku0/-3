@@ -1,0 +1,13 @@
+data = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+
+first_three = data[:3]
+print(f"Первая тройка: {first_three}")
+
+last_three = data[-3:]
+print(f"Последняя тройка: {last_three}")
+
+reversed_data = data[::-1]
+print(f"Обратный порядок: {reversed_data}")
+# Элементы с нечетными индексами
+odd_index_elements = data[1::2]
+print(f"Элементы с нечетными индексами: {odd_index_elements}")
