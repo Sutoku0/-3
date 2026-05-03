@@ -1,0 +1,13 @@
+# Ввод списков сотрудников
+line1 = "1 2 3"
+line2 = "4 5 6"
+line3 = "7 8 9"
+
+line1_ids = set(map(int, line1.split()))
+line2_ids = set(map(int, line2.split()))
+line3_ids = set(map(int, line3.split()))
+
+all_ids = set(range(11))
+absent_ids = all_ids - (line1_ids | line2_ids | line3_ids)
+
+print(' '.join(map(str, sorted(absent_ids))))
