@@ -1,0 +1,15 @@
+import random
+
+nested_list = [[random.randint(-10, 10) for _ in range(5)] for _ in range(4)]
+print(f"Исходный список: {nested_list}")
+
+filtered_list = []
+
+for sublist in nested_list:
+    new_sublist = []
+    for item in sublist:
+        if item > 0:
+            new_sublist.append(item)
+    filtered_list.append(new_sublist)
+
+print(f"Отфильтрованный список (только положитттельные): {filtered_list}")
