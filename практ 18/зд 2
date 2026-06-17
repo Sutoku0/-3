@@ -1,0 +1,17 @@
+class Monster:
+
+    def __init__(self, name="Неизвестная тварь", hp="100", dmg="10"):
+        self.name = name
+        self.hp = hp
+        self.dmg = dmg
+
+        print(f"Монстр: {self.name}")
+        print(f"Хп: {self.hp}")
+        print(f"Дамаг: {self.dmg}")
+        print()
+
+name1, hp1, dmg1 = input("Введите имя, кол-во здоровья и урона для первого монстра: ").split()
+name2, hp2, dmg2 = input("Введите имя, кол-во здоровья и урона для второго монстра: ").split()
+
+m1 = Monster(name1, hp1, dmg1)
+m2 = Monster(name2, hp2, dmg2)
