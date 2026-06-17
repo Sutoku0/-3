@@ -1,0 +1,15 @@
+class Monster:
+
+    def __init__(self, name="Неизвестная тварь", hp="120", dmg="18"):
+        self.name = name
+        self.hp = hp
+        self.dmg = dmg
+        print(f"--- Статус ---")
+        print(f"Имя: {self.name}")
+        print(f"❤️: {self.hp}")
+        print(f"⚔️: {self.dmg}")
+        print(f"--------------")
+
+
+gargoyle = Monster("Горгулья", "120", "18")
+
