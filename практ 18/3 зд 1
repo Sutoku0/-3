@@ -1,0 +1,9 @@
+class DarkEntity:
+    def __init__(self, name, species, danger_level):
+        self.__name = name
+        self.__species = species
+        self.__danger_level = danger_level
+
+Balor =  DarkEntity("Балор", "Высший Демон", "99")
+
+print(f"Данные из Гримуара: {Balor._DarkEntity__name}, {Balor._DarkEntity__species}, {Balor._DarkEntity__danger_level} ")
