@@ -1,0 +1,293 @@
+import random
+
+
+# ЭТАП 1 - Инкапсуляция
+class Monster:
+    """Базовый класс монстра"""
+
+    def __init__(self, name, hp, dmg):
+        self.__name = name
+        self.__hp = hp
+        self.__dmg = dmg
+
+    def get_name(self):
+        return self.__name
+
+    def get_hp(self):
+        return self.__hp
+
+    def get_dmg(self):
+        return self.__dmg
+
+    def set_hp(self, value):
+        if value < 0:
+            self.__hp = 0
+        else:
+            self.__hp = value
+
+    def is_alive(self):
+        return self.__hp > 0
+
+    def show_status(self):
+        print(f"[{self.__name}] HP: {self.__hp}")
+
+    def take_damage(self, damage):
+        #Стандартная версия получения урона
+        self.set_hp(self.get_hp() - damage)
+        print(f"{self.get_name()} получает {damage} урона. HP: {self.get_hp()}")
+
+    def attack_hunter(self, hunter):
+        # Атака охотника
+        hunter.set_hp(hunter.get_hp() - self.__dmg)
+        print(f"{self.get_name()} атакует охотника! Урон: {self.__dmg}")
+
+
+# ЭТАП 2 - Наследование
+class Zombie(Monster):
+    def __init__(self, name):
+        super().__init__(name, 120, 10)
+
+    def take_damage(self, damage):
+        # Зомби просто получает урон, но с уникальным сообщением
+        self.set_hp(self.get_hp() - damage)
+        print(f"{self.get_name()} теряет конечность! Получено: {damage}. HP: {self.get_hp()}")
+
+
+class Vampire(Monster):
+    def __init__(self, name):
+        super().__init__(name, 80, 15)
+
+    def take_damage(self, damage):
+        # Поглощает 5 урона
+        absorbed = 5
+        actual_damage = max(0, damage - absorbed)
+        self.set_hp(self.get_hp() - actual_damage)
+        print(f"{self.get_name()} поглощает {absorbed} урона! Получено: {actual_damage}. HP: {self.get_hp()}")
+
+
+class Ghost(Monster):
+    def __init__(self, name):
+        super().__init__(name, 60, 20)
+
+    def take_damage(self, damage):
+        # 30% шанс уклниться
+        if random.random() < 0.3:
+            print(f"{self.get_name()} уклоняется от атаки! HP: {self.get_hp()}")
+        else:
+            self.set_hp(self.get_hp() - damage)
+            print(f"{self.get_name()} получает {damage} урона. HP: {self.get_hp()}")
+
+
+class Werewolf(Monster):
+    def __init__(self, name):
+        super().__init__(name, 100, 25)
+        self.__transformed = False
+
+    def take_damage(self, damage):
+        self.set_hp(self.get_hp() - damage)
+        print(f"{self.get_name()} получает {damage} урона. HP: {self.get_hp()}")
+
+        # При HP < 50 трансформирруется
+        if self.get_hp() < 50 and not self.__transformed:
+            self.__transformed = True
+            print(f"{self.get_name()} трансформируется в свою истинную форму! Сила увеличивается!")
+
+
+# ЭТАП 3 - Полиморфизм: Арсенал охотника
+class Weapon:
+    def __init__(self, name):
+        self.__name = name
+
+    def get_name(self):
+        return self.__name
+
+    def use(self, monster):
+        # Базовый метод использования оружия (будет переопределён)
+        pass
+
+
+class SilverSword(Weapon):
+    def __init__(self):
+        super().__init__("Серебряный меч")
+
+    def use(self, monster):
+        damage = 30
+        print(f"\nВан Хельсинг взмахивает Серебряным мечом!")
+        monster.take_damage(damage)
+
+
+class HolyWater(Weapon):
+    def __init__(self):
+        super().__init__("Святая вода")
+
+    def use(self, monster):
+        damage = 20
+        print(f"\nВан Хельсинг брызгает Святой водой!")
+        monster.take_damage(damage)
+
+
+class CrossbowBolt(Weapon):
+    def __init__(self):
+        super().__init__("Арбалет с болтом")
+
+    def use(self, monster):
+        damage = 25
+        print(f"\nВан Хельсинг стреляет из арбалета!")
+        monster.take_damage(damage)
+
+
+# ЭТАП 4 - Класс Охотника
+class Hunter:
+    def __init__(self, name):
+        self.__name = name
+        self.__hp = 100
+        self.__weapons = []
+
+    def get_name(self):
+        return self.__name
+
+    def get_hp(self):
+        return self.__hp
+
+    def set_hp(self, value):
+        if value < 0:
+            self.__hp = 0
+        else:
+            self.__hp = value
+
+    def add_weapon(self, weapon):
+        self.__weapons.append(weapon)
+        print(f"Оружие '{weapon.get_name()}' добавлено в арсенал!")
+
+    def show_inventory(self):
+        if not self.__weapons:
+            print("Инвентарь пуст!")
+            return
+
+        print("\n=== Инвентарь охотника ===")
+        for i, weapon in enumerate(self.__weapons, 1):
+            print(f"{i}. {weapon.get_name()}")
+        print("=" * 27)
+
+    def attack(self, weapon_index, monster):
+        if weapon_index < 1 or weapon_index > len(self.__weapons):
+            print("Неверный индекс оружия!")
+            return False
+
+        weapon = self.__weapons[weapon_index - 1]
+        print(f"\n{self.__name} атакует {monster.get_name()}!")
+        weapon.use(monster)
+        return True
+
+    def is_alive(self):
+        return self.__hp > 0
+
+    def show_status(self):
+        print(f"\n[{self.__name}] HP: {self.__hp}")
+
+
+# ЭТАП 5 - Финальный бой
+def run_game():
+    print("=" * 60)
+    print("ДОБРО ПОЖАЛОВАТЬ В СИМУЛЯТОР ОХОТЫ НА НЕЧИСТЬ!")
+    print("=" * 60)
+
+    # Создаём охотника
+    hunter = Hunter("Ван Хельсинг")
+    print(f"\nОхотник {hunter.get_name()} готов к бою!")
+
+    # Добавляем оружие
+    hunter.add_weapon(SilverSword())
+    hunter.add_weapon(HolyWater())
+    hunter.add_weapon(CrossbowBolt())
+    hunter.show_inventory()
+
+    # Создаём монстров
+    monsters = [
+        Zombie("Зомби-страж"),
+        Vampire("Граф Дракула"),
+        Ghost("Призрак замка"),
+        Werewolf("Оборотень")
+    ]
+
+    print("\n" + "=" * 60)
+    print("МОНСТРЫ ПРИБЛИЖАЮТСЯ!")
+    print("=" * 60)
+    for monster in monsters:
+        monster.show_status()
+
+    # Игровой цикл
+    print("\n" + "=" * 60)
+    print("БОЙ НАЧИНАЕТСЯ!")
+    print("=" * 60)
+
+    round_number = 1
+    current_monster_index = 0
+
+    while hunter.is_alive() and current_monster_index < len(monsters):
+        monster = monsters[current_monster_index]
+
+        print(f"\n{'=' * 60}")
+        print(f"РАУНД {round_number} - Бой с {monster.get_name()}")
+        print(f"{'=' * 60}")
+
+        # Охотник атакует
+        hunter.show_status()
+        monster.show_status()
+
+        # Выбор оружия
+        print("\nВыберите оружие для атаки:")
+        hunter.show_inventory()
+
+        while True:
+            try:
+                choice = int(input("Ваш выбор (номер оружия): "))
+                if 1 <= choice <= 3:
+                    break
+                else:
+                    print("Пожалуйста, выберите номер от 1 до 3")
+            except ValueError:
+                print("Пожалуйста, введите число!")
+
+        hunter.attack(choice, monster)
+
+        # Проверка: монстр жив?
+        if not monster.is_alive():
+            print(f"\n{monster.get_name()} повержен! Победа!")
+            current_monster_index += 1
+            round_number += 1
+            continue
+
+        # Монстр атакует в ответ
+        print(f"\n{monster.get_name()} контратакует!")
+        monster.attack_hunter(hunter)
+
+        # Проверка: охотник жив?
+        if not hunter.is_alive():
+            print(f"\n{monster.get_name()} победил охотника!")
+            break
+
+        round_number += 1
+
+        # После каждого раунда показываем статус
+        print(f"\n--- Статус после раунда {round_number - 1} ---")
+        hunter.show_status()
+        monster.show_status()
+
+    # Итоговое сообщение
+    print("\n" + "=" * 60)
+    print("ИТОГ БИТВЫ")
+    print("=" * 60)
+
+    if hunter.is_alive() and current_monster_index == len(monsters):
+        print(f"ПОБЕДА! {hunter.get_name()} зачистил замок от всей нечисти!")
+        print(f"Осталось здоровья: {hunter.get_hp()}")
+    elif not hunter.is_alive():
+        print("ПОРАЖЕНИЕ! Монстры одолели охотника...")
+        print(f"Уничтожено монстров: {current_monster_index} из {len(monsters)}")
+    else:
+        print("Бой прерван... Судьба замка остаётся неизвестной.")
+
+
+# Запуск игры йоуууу (я устал это делать блин )
+run_game()
