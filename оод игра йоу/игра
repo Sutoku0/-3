@@ -3,7 +3,7 @@ import random
 
 # ЭТАП 1 - Инкапсуляция
 class Monster:
-    """Базовый класс монстра"""
+# Базовый класс монстра
 
     def __init__(self, name, hp, dmg):
         self.__name = name
